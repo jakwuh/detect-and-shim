@@ -1,0 +1,19 @@
+{
+  "name": "detect-and-shim",
+  "version": "1.0.0",
+  "description": "Easy shim ftw",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "webpack && node ./dist/main.bundle.js"
+  },
+  "author": "jakwuh <jakwuh@yandex-team.ru>",
+  "license": "MIT",
+  "dependencies": {
+    "object.assign": "^4.0.4",
+    "promise-polyfill": "^6.0.2",
+    "promise.prototype.finally": "^2.0.1"
+  },
+  "devDependencies": {
+    "webpack": "^1.13.3"
+  }
+}
