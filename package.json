@@ -8,6 +8,9 @@
   },
   "author": "jakwuh <jakwuh@yandex-team.ru>",
   "license": "MIT",
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org"
+  },
   "dependencies": {
     "object.assign": "^4.0.4",
     "promise-polyfill": "^6.0.2",
