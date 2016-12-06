@@ -74,13 +74,13 @@ module.exports = function (config: Array<ShimConfig>, callback?: Function) {
         return setDefaults(source);
     }
 
-    function normalize(source): ?Shim {
+    function normalize(source: any): ?Shim {
         if (isString(source)) {
             return normalizeString(source);
         } else if (isObject(source) && isFunction(source.check) && isFunction(source.shim)) {
             return normalizeShimLike(source);
         } else {
-            warn('Cannot parse shim: '+ source);
+            warn('Malformed shims config');
         }
     }
 
