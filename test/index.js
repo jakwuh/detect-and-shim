@@ -1,5 +1,5 @@
-import {expect} from 'chai';
-import shim from '../src/index';
+const {expect} = require('chai');
+const shim = require('../src/index');
 
 function tryExecute(fn, done) {
     try {
