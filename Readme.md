@@ -2,13 +2,13 @@
 
 > Easy to use asynchronous automatic shims
 
-### Installation
+## Installation
 
 ```bash
 npm install -S detect-and-shim
 ```
 
-### Usage
+## Usage
 
 ```js
 import shim from 'detect-and-shim';
@@ -44,9 +44,9 @@ shim([{
 })
 ```
 
-All shims are loaded asynchronously using `require.ensure([])`.
+All included shims are loaded asynchronously using `require.ensure([])`. Custom shims could be loaded asynchronously as well.
 
-### List of included shims:
+## List of included shims:
 
 - `object.assign`
 - `promise`
