@@ -2,6 +2,12 @@
 
 > Easy to use asynchronous automatic shims
 
+### Installation
+
+```bash
+npm install -S detect-and-shim
+```
+
 ### Usage
 
 ```js
