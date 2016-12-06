@@ -1,11 +1,11 @@
 module.exports = {
-    check: function () {
+    check() {
         return !Object.assign;
     },
-    shim: function (cb) {
-        require.ensure([], function() {
+    shim(cb) {
+        require.ensure([], () => {
             require('object.assign').shim();
             cb();
-        });
+        }, 'shims/object.assign');
     }
 };

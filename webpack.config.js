@@ -1,7 +1,12 @@
-var path = require('path');
+const path = require('path');
 
 module.exports = {
     target: 'node',
+
+    externals: {
+        'chai': 'commonjs chai',
+        'chai-as-promised': 'commonjs chai-as-promised'
+    },
 
     entry: {
         main: ['./test/index']
@@ -15,9 +20,21 @@ module.exports = {
         ]
     },
 
+    module: {
+        loaders: [{
+            test: /\.js$/,
+            loader: 'babel',
+            include: [
+                path.join(__dirname, './src'),
+                path.join(__dirname, './test')
+            ]
+        }]
+    },
+
     output: {
         path: path.join(__dirname, './dist'),
-        filename: '[name].bundle.js'
+        filename: '[name].js',
+        chunkFilename: '[name].js'
     },
 
     stats: {

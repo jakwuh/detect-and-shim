@@ -1,11 +1,11 @@
 module.exports = {
-    check: function () {
-        return !Promise.finally;
+    check() {
+        return !Promise.prototype.finally;
     },
-    shim: function (cb) {
-        require.ensure([], function() {
+    shim(cb) {
+        require.ensure([], () => {
             require('promise.prototype.finally').shim();
             cb();
-        });
+        }, 'shims/promise.finally');
     }
 };

@@ -1,6 +1,5 @@
 node_modules/
 dist/
 .idea/
-.git/
 webpack.config.js
 test/

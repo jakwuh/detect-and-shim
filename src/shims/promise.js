@@ -1,11 +1,11 @@
 module.exports = {
-    check: function () {
+    check() {
         return typeof Promise === 'undefined';
     },
-    shim: function (cb) {
-        require.ensure([], function() {
+    shim(cb) {
+        require.ensure([], () => {
             require('../global').Promise = require('promise-polyfill');
             cb();
-        });
+        }, 'shims/promise');
     }
 };

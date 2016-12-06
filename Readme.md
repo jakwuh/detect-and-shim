@@ -1,4 +1,6 @@
-# detect-and-shim
+# detect-and-shim [![Build Status](https://travis-ci.org/jakwuh/detect-and-shim.svg?branch=master)](https://travis-ci.org/jakwuh/detect-and-shim)
+
+> Easy to use asynchronous automatic shims
 
 ### Usage
 
@@ -7,12 +9,17 @@ import shim from 'detect-and-shim';
 
 shim([
     'promise',
-    'promise.finally',
+    // load 'promise.finally' only after 'promise'
+    ['promise.finally', ['promise']],
     'object.assign'
 ], ()  => {
     // now you could work!
 })
 ```
+
+By default, all shims are loaded in parallel. 
+If some shims should be loaded only after some other shims, 
+it could be done by defining an array `['shim', [/* shim dependencies */]]`
 
 Additionally, you could pass your own shims:
 
@@ -24,14 +31,14 @@ shim([{
         return true; // if shim is needed;
     },
     shim(cb) {
-        // shim and call cb
+        // shim and call cb()
     }
 }], ()  => {
     // now you could work!
 })
 ```
 
-All shims are loaded asynchronously using `reqiure.ensure([])`.
+All shims are loaded asynchronously using `require.ensure([])`.
 
 ### List of included shims:
 

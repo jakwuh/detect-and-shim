@@ -1,10 +1,11 @@
 {
   "name": "detect-and-shim",
   "version": "1.0.0",
-  "description": "Easy shim ftw",
+  "description": "Easy to use asynchronous shims",
   "main": "src/index.js",
   "scripts": {
-    "test": "webpack && node ./dist/main.bundle.js"
+    "test": "webpack ./test && mocha ./dist/main.js",
+    "prepublish": "npm test"
   },
   "author": "jakwuh <jakwuh@yandex-team.ru>",
   "license": "MIT",
@@ -17,6 +18,10 @@
     "promise.prototype.finally": "^2.0.1"
   },
   "devDependencies": {
+    "babel-loader": "^6.2.8",
+    "babel-plugin-transform-flow-strip-types": "^6.18.0",
+    "babel-preset-es2015": "^6.18.0",
+    "flow-bin": "^0.36.0",
     "webpack": "^1.13.3"
   }
 }
