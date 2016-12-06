@@ -7,7 +7,8 @@ type Shim = ShimLike & {
     subscribers: Array<Shim>, // we will notify them after applying shim
     countdown: number, // number of dependencies
     processed: boolean,
-    initialized: boolean
+    initialized: boolean,
+    finished: boolean
 }
 
 module.exports = function (config: Array<ShimConfig>, callback?: Function) {
@@ -32,7 +33,7 @@ module.exports = function (config: Array<ShimConfig>, callback?: Function) {
         return isObject(obj) && toString(obj) === '[object Array]';
     }
 
-    function iterate<T>(array: Array<T>, fn: Function):? T {
+    function iterate<T>(array: Array<T>, fn: Function): ?T {
         let length = array.length;
         for (let i = 0; i < length; ++i) {
             if (fn(array[i])) {
@@ -58,12 +59,14 @@ module.exports = function (config: Array<ShimConfig>, callback?: Function) {
         let shim = ((shimLike: any): Shim);
         shim.countdown = 0;
         shim.subscribers = [];
+        shim.finished = false;
         shim.processed = false;
         shim.initialized = false;
         return shim;
     }
 
     function normalizeString(source: string): Shim {
+        // @disable-flow
         return setDefaults(require('./shims/' + source));
     }
 
@@ -81,16 +84,16 @@ module.exports = function (config: Array<ShimConfig>, callback?: Function) {
         }
     }
 
-    let shimsPlanned = 0;
-    let shimsInProgress = 0;
-    let processing = true;
-    let shimsSet = [];
-    let shimPairs = [];
     let errors = [];
+    let shimSet = [];
+    let shimPairs = [];
+    let remainedShims = 0;
+    let progressShims = 0;
+    let processing = true;
 
     function maybeFinish() {
-        if (!processing && shimsInProgress === 0) {
-            if (shimsPlanned !== 0) {
+        if (!processing && progressShims === 0) {
+            if (remainedShims !== 0) {
                 throwError('Shims have unsatisfied or circular dependencies');
             } else if (errors.length) {
                 throwError(errors[0].toString());
@@ -109,8 +112,9 @@ module.exports = function (config: Array<ShimConfig>, callback?: Function) {
                 process(subscriber);
             });
         }
-        shimsInProgress--;
-        shimsPlanned--;
+        shim.finished = true;
+        progressShims--;
+        remainedShims--;
         maybeFinish();
     }
 
@@ -119,14 +123,12 @@ module.exports = function (config: Array<ShimConfig>, callback?: Function) {
             return; // shim dependencies are not ready || shim was already processed
         }
 
-        let callbackWasCalled = false;
-        shimsInProgress++; // atomic
+        progressShims++; // atomic
         shim.processed = true;
 
         try {
             if (shim.check()) {
                 shim.shim(err => {
-                    callbackWasCalled = true;
                     onProcess(err, shim)
                 });
             } else {
@@ -134,8 +136,8 @@ module.exports = function (config: Array<ShimConfig>, callback?: Function) {
             }
         } catch (e) {
             errors.push(e);
-            if (!callbackWasCalled) {
-                shimsInProgress--;
+            if (!shim.finished) {
+                progressShims--;
             }
         }
     }
@@ -147,6 +149,7 @@ module.exports = function (config: Array<ShimConfig>, callback?: Function) {
             shim = normalize(source[0]);
 
             if (isArray(source[1])) {
+                // @disable-flow
                 iterate(source[1], (source: ShimSource) => {
                     let dependency = normalize(source);
                     if (dependency) {
@@ -167,23 +170,23 @@ module.exports = function (config: Array<ShimConfig>, callback?: Function) {
         let shim = pair[0];
         let dependencies = pair[1];
         if (shim.initialized) {
-            return true; // shimsSet should be unique
+            return true; // set should be unique
         }
         shim.initialized = true;
         iterate(dependencies, (dependency) => {
             shim.countdown++;
             dependency.subscribers.push(shim);
         });
-        shimsSet.push(shim);
+        shimSet.push(shim);
     });
 
     if (duplicate) {
         return throwError('Shims config contains duplicates');
     }
 
-    shimsPlanned = shimsSet.length;
+    remainedShims = shimSet.length;
     processing = true;
-    iterate(shimsSet, (shim: Shim) => {
+    iterate(shimSet, (shim: Shim) => {
         process(shim);
     });
     processing = false;

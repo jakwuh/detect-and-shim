@@ -3,4 +3,6 @@
 [ignore]
 .*/node_modules/.*
 .*/dist/.*
+.*/lib/.*
 [options]
+suppress_comment= \\(.\\|\n\\)*\\@disable-flow

@@ -1,5 +1,9 @@
 node_modules/
 dist/
+test/
 .idea/
 webpack.config.js
-test/
+.babelrc
+.flowconfig
+.travis.yml
+.gitignore
