@@ -2,10 +2,11 @@
   "name": "detect-and-shim",
   "version": "1.0.0",
   "description": "Easy to use asynchronous shims",
-  "main": "src/index.js",
+  "main": "lib/index.js",
   "scripts": {
     "test": "webpack ./test && mocha ./dist/main.js",
-    "prepublish": "npm test"
+    "build": "babel -d lib src",
+    "prepublish": "npm run build && npm test"
   },
   "author": "jakwuh <jakwuh@yandex-team.ru>",
   "license": "MIT",

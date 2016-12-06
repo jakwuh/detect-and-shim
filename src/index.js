@@ -163,7 +163,9 @@ module.exports = function (config: Array<ShimConfig>, callback?: Function) {
         }
     });
 
-    let duplicate = iterate(shimPairs, ([shim, dependencies]) => {
+    let duplicate = iterate(shimPairs, (pair) => {
+        let shim = pair[0];
+        let dependencies = pair[1];
         if (shim.initialized) {
             return true; // shimsSet should be unique
         }
