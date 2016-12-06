@@ -159,7 +159,7 @@ describe('shims', function () {
         shim(err => {
             tryExecute(() => {
                 expect(err).to.be.undefined;
-                expect(check(), `Expected shim ${name} to work properly`).to.be.false;
+                expect(check(), 'Expected shim ' + name + ' to work properly').to.be.false;
             }, done);
         });
     }
