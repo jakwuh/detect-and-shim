@@ -93,10 +93,14 @@ module.exports = function (config: Array<ShimConfig>, callback?: Function) {
 
     function maybeFinish() {
         if (!processing && progressShims === 0) {
+            let errorsMessage = '';
+            iterate(errors, error => {
+                errorsMessage += '\r\n' + error.toString();
+            });
             if (remainedShims !== 0) {
-                throwError('Shims have unsatisfied or circular dependencies');
+                throwError('Shims have unsatisfied or circular dependencies' + errorsMessage);
             } else if (errors.length) {
-                throwError(errors[0].toString());
+                throwError(errorsMessage);
             } else if (callback) {
                 callback();
             }
