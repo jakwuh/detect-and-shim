@@ -179,4 +179,9 @@ describe('shims', function () {
         checkShim('promise.finally', done);
     });
 
+    it('array.includes', function (done) {
+        delete Array.prototype.includes;
+        checkShim('array.includes', done);
+    });
+
 });
